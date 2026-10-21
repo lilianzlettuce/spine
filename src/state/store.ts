@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { generate } from "../core/generate";
+import { samplesFromStroke } from "../core/curves";
 import type { ArchetypeName } from "../core/archetypes";
-import type { Scene } from "../core/types";
+import type { Scene, Pt } from "../core/types";
 
 interface State {
   archetype: ArchetypeName;
@@ -31,6 +32,15 @@ export const useStore = create<State>()((set, get) => ({
   regenerate: () => {
     const seed = Math.floor(Math.random() * 1_000_000);
     set({ seed, scene: generate(get().archetype, seed) });
+  },
+  generateFromStroke: (stroke: Pt[]) => {
+    const mainCurveSamples = samplesFromStroke(stroke);
+    console.log(mainCurveSamples);
+    const seed = Math.floor(Math.random() * 1_000_000);
+    set({
+      seed,
+      scene: generate(get().archetype, seed, mainCurveSamples),
+    });
   },
   setLight: (light) => set({ light }),
   setShowJoints: (showJoints) => set({ showJoints }),

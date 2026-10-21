@@ -4,10 +4,10 @@ export interface Pt {
   y: number;
 }
 
-// A point on a curve: position, heading (radians), arc length from start
+// A point on a curve
 export interface Sample extends Pt {
-  th: number; // heading angle
-  s: number; // arc length
+  th: number; // heading angle in radians (direction curve is pointing rn)
+  s: number; // arc length (distance travelled along curve from start)
 }
 
 export interface Curve {

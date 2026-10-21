@@ -8,7 +8,7 @@ type DrawFn = (ctx: CanvasRenderingContext2D, w: number, h: number) => void;
  * @returns {{<HTMLCanvasElement>, function}} Canvas ref and requestRedraw callback
  */
 export function useCanvas(draw: DrawFn) {
-  const ref = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawRef = useRef(draw);
   drawRef.current = draw; // always call the latest draw fn
   const raf = useRef(0);
@@ -17,7 +17,7 @@ export function useCanvas(draw: DrawFn) {
     if (raf.current) return;
     raf.current = requestAnimationFrame(() => {
       raf.current = 0;
-      const canvas = ref.current;
+      const canvas = canvasRef.current;
       if (!canvas) return;
 
       // Calculate DPR, dimensions of canvas
@@ -36,7 +36,7 @@ export function useCanvas(draw: DrawFn) {
   }, []);
 
   useEffect(() => {
-    const canvas = ref.current!;
+    const canvas = canvasRef.current!;
     const ro = new ResizeObserver(requestRedraw);
     ro.observe(canvas);
     requestRedraw();
@@ -47,5 +47,5 @@ export function useCanvas(draw: DrawFn) {
     };
   }, [requestRedraw]);
 
-  return { ref, requestRedraw };
+  return { canvasRef, requestRedraw };
 }

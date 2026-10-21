@@ -4,8 +4,12 @@ import { addKappa, curveFromCurvature, hookTail, sineBends } from "./curves";
 import { curveLength, pointAtDistance, turnSign } from "./sampling";
 import { ARCHETYPES, type Archetype, type ArchetypeName } from "./archetypes";
 
-/** Pure: (archetype, seed) -> Scene data. No React, no canvas. */
-export function generate(name: ArchetypeName, seed: number): Scene {
+/** Pure: (archetype, seed) -> Scene data */
+export function generate(
+  name: ArchetypeName,
+  seed: number,
+  mainCurveSamples: Sample[] = [],
+): Scene {
   const A: Archetype = ARCHETYPES[name];
   const rng = mulberry32(seed);
   const curves: Curve[] = [];
@@ -23,12 +27,21 @@ export function generate(name: ArchetypeName, seed: number): Scene {
       ? hookTail(L, 0.3, A.mainHook * (rng.next() < 0.5 ? 1 : -1))
       : () => 0,
   );
-  const main: Curve = {
+
+  // Generate random main curve if not given
+  if (mainCurveSamples.length === 0) {
+    mainCurveSamples = curveFromCurvature(kappa, L, {
+      x: 0,
+      y: 0,
+      th: rng.range(-0.3, 0.3),
+    });
+  }
+  const main = {
     id: newId(),
     parentId: null,
     level: 0,
     attachS: 0,
-    pts: curveFromCurvature(kappa, L, { x: 0, y: 0, th: rng.range(-0.3, 0.3) }),
+    pts: mainCurveSamples,
   };
   curves.push(main);
 
