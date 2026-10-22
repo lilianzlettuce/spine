@@ -1,7 +1,7 @@
 import type { Scene } from "../core/types";
 import { curveLength } from "../core/sampling";
 import { buildRibbon, inkEdge, tracePolygon } from "./ribbon";
-import { hatchRibbon } from "./hatching";
+import { hatchRibbon, hatchToContour } from "./hatching";
 import { paperGrain } from "./paper";
 import type { RenderMode } from "../core/types";
 
@@ -128,7 +128,7 @@ function drawInk(
       ctx.clip();
       ctx.strokeStyle = INK;
       ctx.globalAlpha = 0.85;
-      hatchRibbon(ctx, ribbon, {
+      hatchToContour(ctx, ribbon, {
         light: o.light,
         unit: o.unit,
         px: o.px,
