@@ -16,6 +16,20 @@ export interface Archetype {
 }
 
 export const ARCHETYPES = {
+  a: {
+    mainLength: 800,
+    bends: [0.5, 2], // [0.5, 1.5],
+    swing: [0.7, 2], // try 10
+    taper: 1, // try 10, 100, 1000
+    mainHook: 0,
+    branches: [2, 6],
+    branchLen: [0.18, 0.6],
+    branchSwing: [0.5, 1.2],
+    angle: [0.4, 0.9],
+    outerBias: 0.75,
+    hookChance: 0.15,
+    clusters: [2, 3],
+  },
   serpentine: {
     mainLength: 800,
     bends: [0.5, 2], // [0.5, 1.5],

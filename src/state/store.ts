@@ -14,7 +14,7 @@ interface State {
   setArchetype: (a: ArchetypeName) => void;
   setSeed: (s: number) => void;
   regenerate: () => void;
-  generateFromStroke: (stroke: Pt[]) => void;
+  createStroke: (stroke: Pt[]) => void;
   setLight: (l: number) => void;
   setShowJoints: (v: boolean) => void;
   setDrawMode: (m: "auto" | "draw") => void;
@@ -23,43 +23,77 @@ interface State {
 const INITIAL_SEED = 69;
 
 export const useStore = create<State>()((set, get) => ({
-  archetype: "serpentine",
+  archetype: "a",
   seed: INITIAL_SEED,
   light: -Math.PI / 4,
   showJoints: true,
-  scene: generate("serpentine", INITIAL_SEED),
+  scene: {
+    seed: INITIAL_SEED,
+    archetype: "serpentine",
+    spines: [generate("a", INITIAL_SEED)],
+  },
   drawMode: "auto",
 
   setArchetype: (archetype) =>
-    set({ archetype, scene: generate(archetype, get().seed) }),
-  setSeed: (seed) => set({ seed, scene: generate(get().archetype, seed) }),
+    set({
+      archetype,
+      scene: {
+        seed: get().seed,
+        archetype: archetype,
+        spines: [generate(archetype, get().seed)],
+      },
+    }),
+  setSeed: (seed) =>
+    set({
+      seed,
+      scene: {
+        seed: seed,
+        archetype: get().archetype,
+        spines: [generate(get().archetype, seed)],
+      },
+    }),
   regenerate: () => {
-    const seed = Math.floor(Math.random() * 1_000_000);
-    set({ seed, scene: generate(get().archetype, seed) });
-  },
-  generateFromStroke: (stroke: Pt[]) => {
-    const mainCurveSamples = samplesFromStroke(stroke);
-    console.log(mainCurveSamples);
     const seed = Math.floor(Math.random() * 1_000_000);
     set({
       seed,
-      scene: generate(get().archetype, seed, mainCurveSamples),
+      scene: {
+        seed: seed,
+        archetype: get().archetype,
+        spines: [generate(get().archetype, seed)],
+      },
+    });
+  },
+  createStroke: (stroke: Pt[]) => {
+    // Samples and seed for new spine
+    const newMainCurveSamples = samplesFromStroke(stroke);
+    const newSeed = Math.floor(Math.random() * 1_000_000);
+    set({
+      scene: {
+        seed: get().seed,
+        archetype: get().archetype,
+        spines: [
+          ...get().scene.spines,
+          generate(get().archetype, newSeed, newMainCurveSamples),
+        ],
+      },
     });
   },
   setLight: (light) => set({ light }),
   setShowJoints: (showJoints) => set({ showJoints }),
   setDrawMode: (mode) => {
-    console.log("drawmode set");
     set({
       drawMode: mode,
       scene:
         mode === "auto"
-          ? generate(get().archetype, get().seed)
+          ? {
+              seed: get().seed,
+              archetype: get().archetype,
+              spines: [generate(get().archetype, get().seed)],
+            }
           : {
               seed: get().seed,
               archetype: get().archetype,
-              curves: [],
-              joints: [],
+              spines: [],
             },
     });
   },

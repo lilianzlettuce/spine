@@ -10,6 +10,7 @@ export interface Sample extends Pt {
   s: number; // arc length (distance travelled along curve from start)
 }
 
+// A curve
 export interface Curve {
   id: string;
   parentId: string | null;
@@ -18,11 +19,16 @@ export interface Curve {
   pts: Sample[];
 }
 
+// A group of curves (1 parent + however many children)
+export interface Spine {
+  curves: Curve[];
+  joints: Pt[]; // attachment points (future: joint components)
+}
+
 // Plain serializable data
 // Renderers consume this, nothing else
 export interface Scene {
   seed: number;
   archetype: string;
-  curves: Curve[];
-  joints: Pt[]; // attachment points (future: joint components)
+  spines: Spine[];
 }

@@ -5,13 +5,14 @@ import { useCanvas } from "../hooks/useCanvas";
 import type { Pt } from "../core/types";
 
 export function CanvasView() {
-  const { scene, light, showJoints, drawMode, generateFromStroke } = useStore();
+  const { scene, light, showJoints, drawMode, createStroke } = useStore();
 
   // User drawing vars
   const isMouseDown = useRef(false);
   const currentCurve = useRef<Pt[]>([]);
 
   const { canvasRef, requestRedraw } = useCanvas((ctx, w, h) => {
+    console.log(drawMode);
     renderScene(ctx, scene, {
       w,
       h,
@@ -35,7 +36,7 @@ export function CanvasView() {
 
   useEffect(() => {
     requestRedraw();
-  }, [scene, light, showJoints, drawMode, generateFromStroke]);
+  }, [scene, light, showJoints, drawMode, createStroke]);
 
   // Calculate mouse position in canvas
   const pos = (e: React.PointerEvent) => {
@@ -66,9 +67,8 @@ export function CanvasView() {
         if (!isMouseDown.current) return;
         isMouseDown.current = false;
         console.log(currentCurve.current);
-        generateFromStroke(currentCurve.current); // generate new growth from user input stroke
+        createStroke(currentCurve.current); // generate new growth from user input stroke
         currentCurve.current = []; // reset curve array
-        //regenerate();
       }}
     />
   );

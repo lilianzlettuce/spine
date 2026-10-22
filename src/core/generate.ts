@@ -102,5 +102,5 @@ export function generate(
   }
   grow(main, 1);
 
-  return { seed, archetype: name, curves, joints };
+  return { curves, joints };
 }

@@ -46,7 +46,7 @@ export function Controls() {
         </select>
       </label>
 
-      <button onClick={regenerate}>Regenerate</button>
+      {drawMode === "auto" && <button onClick={regenerate}>New thing</button>}
 
       <label>
         Light angle
@@ -72,7 +72,7 @@ export function Controls() {
       <button onClick={() => exportPng(scene, light)}>Export PNG</button>
 
       <p className="hint">
-        {scene.curves.length} curves · seed {scene.seed}
+        {scene.spines[0]?.curves.length} curves · seed {scene.seed}
       </p>
     </aside>
   );

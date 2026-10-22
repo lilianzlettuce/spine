@@ -30,7 +30,7 @@ export function fitTransform(
     y0 = Infinity,
     x1 = -Infinity,
     y1 = -Infinity;
-  for (const c of scene.curves)
+  for (const c of scene.spines[0].curves)
     for (const p of c.pts) {
       x0 = Math.min(x0, p.x);
       y0 = Math.min(y0, p.y);
@@ -51,6 +51,7 @@ export function renderScene(
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, o.w, o.h);
 
+  console.log(scene);
   const v = o.view ? o.view : fitTransform(scene, o.w, o.h, o.padding);
   ctx.save();
   ctx.translate(v.tx, v.ty);
@@ -60,23 +61,28 @@ export function renderScene(
   ctx.strokeStyle = INK;
 
   // Draw deepest level first so the main flow sits on top
-  const ordered = [...scene.curves].sort((a, b) => b.level - a.level);
-  for (const c of ordered) {
-    ctx.lineWidth = (WIDTH[c.level] ?? 0.7) / v.k; // scale based on size
-    ctx.beginPath();
-    c.pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
-    ctx.stroke();
-  }
-
-  // Show joints
-  if (o.showJoints) {
-    ctx.fillStyle = INK;
-    for (const j of scene.joints) {
+  for (let spine of scene.spines) {
+    const ordered = [...spine.curves].sort((a, b) => b.level - a.level);
+    for (const c of ordered) {
+      ctx.lineWidth = (WIDTH[c.level] ?? 0.7) / v.k; // scale based on size
       ctx.beginPath();
-      ctx.arc(j.x, j.y, 3 / v.k, 0, Math.PI * 2);
-      ctx.fill();
+      c.pts.forEach((p, i) =>
+        i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y),
+      );
+      ctx.stroke();
+    }
+
+    // Show joints
+    if (o.showJoints) {
+      ctx.fillStyle = INK;
+      for (const j of spine.joints) {
+        ctx.beginPath();
+        ctx.arc(j.x, j.y, 3 / v.k, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
   }
+
   ctx.restore();
   return v;
 }
