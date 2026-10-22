@@ -18,9 +18,9 @@ export interface Archetype {
 export const ARCHETYPES = {
   serpentine: {
     mainLength: 800,
-    bends: [3, 5],
-    swing: [0.7, 1.1],
-    taper: 0.5,
+    bends: [0.5, 2], // [0.5, 1.5],
+    swing: [0.7, 2], // try 10
+    taper: 1, // try 10, 100, 1000
     mainHook: 0,
     branches: [6, 10],
     branchLen: [0.18, 0.4],

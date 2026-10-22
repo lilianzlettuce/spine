@@ -92,6 +92,7 @@ export function CanvasView() {
 
   return (
     <canvas
+      className="border-solid border-1 border-gray-200"
       ref={canvasRef}
       style={{ width: "100%", height: "100%" }}
       onMouseMove={handleMouseMove}

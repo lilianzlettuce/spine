@@ -1,13 +1,18 @@
 import type { Sample } from "./types";
 
-/** Curvature (how sharply curve turns) as a function of arc length
- * kappa(s) in radians per unit of distance */
+/** Function defining curvature (how sharply curve turns) as a function of arc length
+ * kappa(s) in radians per unit of distance
+ */
 export type Kappa = (s: number) => number;
 
 /**
  * Integrate curvature into a curve:  theta' = kappa,  (x,y)' = (cos, sin)(theta).
  * Smooth by construction (no kinks), so offset ribbons behave later.
  * @param {Kappa} kappa - curvature
+ * @param {number} length - length of ??
+ * @param origin - origin point (x,y,theta)
+ * @param step - size of step between samples (higher means lower res)
+ * @return {Sample[]} - array of Sample points defining the curve
  */
 export function curveFromCurvature(
   kappa: Kappa,
@@ -27,8 +32,13 @@ export function curveFromCurvature(
 }
 
 /**
- * n alternating bends. `swing` is the peak heading deviation in radians
- * (~1 = a clear S). `taper` in [0,1] shrinks later bends for asymmetry.
+ * Sine curve
+ * @param {number} n - number of alternating bends
+ * @param {number} swing - the peak heading deviation in radians (~1 = a clear S)
+ * @param {number} length -
+ * @param taper - set in [0,2] shrinks later bends for asymmetry
+ * @param phase - phase of wave
+ * @return {Kappa} -
  */
 export function sineBends(
   n: number,
@@ -61,8 +71,8 @@ export const addKappa =
     ks.reduce((sum, k) => sum + k(s), 0);
 
 // Get curve samples from any array of points (for user-drawn input)
-export function samplesFromStroke(raw: Pt[], step = 4): Sample[] {
-  // 1. smooth: a few passes of a 3-point moving average (keep the endpoints)
+export function samplesFromStroke(raw: Pt[], step = 2): Sample[] {
+  // Smooth: a few passes of a 3-point moving average (keep the endpoints)
   let p = raw;
   for (let pass = 0; pass < 3; pass++) {
     p = p.map((q, i) => {
@@ -74,7 +84,7 @@ export function samplesFromStroke(raw: Pt[], step = 4): Sample[] {
     });
   }
 
-  // 2. resample at even spacing by walking along the polyline
+  // Resample at even spacing by walking along the polyline
   const out: Pt[] = [p[0]];
   let carry = 0; // distance since the last output point
   for (let i = 1; i < p.length; i++) {
@@ -91,7 +101,7 @@ export function samplesFromStroke(raw: Pt[], step = 4): Sample[] {
     carry += segLen;
   }
 
-  // 3. compute heading and arc length for each point
+  // Compute heading and arc length for each point
   return out.map((q, i) => {
     const next = out[Math.min(i + 1, out.length - 1)];
     const prev = out[Math.max(i - 1, 0)];
