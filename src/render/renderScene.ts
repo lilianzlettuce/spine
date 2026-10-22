@@ -165,14 +165,15 @@ function drawInk(
     }
 
     // TODO: joints
-    // Placeholder joints: paper-filled knobs
+    // Placeholder joints: filled circles
     if (o.showJoints) {
-      ctx.fillStyle = PAPER;
+      ctx.fillStyle = o.vineColor;
       ctx.strokeStyle = INK;
-      ctx.lineWidth = 4 * o.px;
+      ctx.lineWidth = 8; // 4 * o.px;
+      const jointSize = 10; // 4 * o.unit;
       for (const j of spine.joints) {
         ctx.beginPath();
-        ctx.arc(j.x, j.y, 4 * o.unit, 0, Math.PI * 2);
+        ctx.arc(j.x, j.y, jointSize, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
       }
@@ -180,7 +181,7 @@ function drawInk(
   }
 }
 
-// The old thin-line view, kept for tuning silhouettes
+// Minimal line view, good for tuning silhouettes
 function drawLines(
   ctx: CanvasRenderingContext2D,
   scene: Scene,

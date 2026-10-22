@@ -117,7 +117,7 @@ export function hatchToContour(
     const half = w / 2;
     const nl = n.x * Lx + n.y * Ly; // >0: +normal side faces the light
 
-    // Try both edges. Each one hatches inward while the surface is still dark.
+    // Try both edges. Each one hatches inward while the surface is still dark
     for (const side of [1, -1]) {
       let reach = 0; // how far in from this edge (0-1 of the half-width) is dark
       for (let k = 1; k <= STEPS; k++) {
