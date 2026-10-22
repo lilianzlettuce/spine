@@ -46,7 +46,7 @@ export function Controls() {
         </select>
       </label>
 
-      {drawMode === "auto" && <button onClick={regenerate}>New thing</button>}
+      {drawMode === "auto" && <button onClick={regenerate}>New curve</button>}
 
       <label>
         Light angle
