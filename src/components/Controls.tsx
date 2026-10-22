@@ -3,7 +3,8 @@ import { useStore } from "../state/store";
 import { exportPng } from "./exportPng";
 
 export function Controls() {
-  const { archetype, seed, light, showJoints, scene, drawMode } = useStore();
+  const { archetype, seed, light, showJoints, scene, drawMode, renderMode } =
+    useStore();
   const {
     setArchetype,
     setSeed,
@@ -11,6 +12,7 @@ export function Controls() {
     setLight,
     setShowJoints,
     setDrawMode,
+    setRenderMode,
   } = useStore.getState();
 
   return (
@@ -30,12 +32,14 @@ export function Controls() {
       </label>
 
       <label>
-        Seed
-        <input
-          type="number"
-          value={seed}
-          onChange={(e) => setSeed(Number(e.target.value) || 0)}
-        />
+        Render Mode
+        <select
+          value={renderMode}
+          onChange={(e) => setRenderMode(e.target.value)}
+        >
+          <option value="line">Line</option>
+          <option value="vine">Vine</option>
+        </select>
       </label>
 
       <label>
@@ -47,6 +51,15 @@ export function Controls() {
       </label>
 
       {drawMode === "auto" && <button onClick={regenerate}>New curve</button>}
+
+      <label>
+        Seed
+        <input
+          type="number"
+          value={seed}
+          onChange={(e) => setSeed(Number(e.target.value) || 0)}
+        />
+      </label>
 
       <label>
         Light angle

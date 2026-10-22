@@ -5,20 +5,22 @@ import { useCanvas } from "../hooks/useCanvas";
 import type { Pt } from "../core/types";
 
 export function CanvasView() {
-  const { scene, light, showJoints, drawMode, createStroke } = useStore();
+  const { scene, light, showJoints, drawMode, renderMode, createStroke } =
+    useStore();
 
   // User drawing vars
   const isMouseDown = useRef(false);
   const currentCurve = useRef<Pt[]>([]);
 
   const { canvasRef, requestRedraw } = useCanvas((ctx, w, h) => {
-    console.log(drawMode);
+    console.log(renderMode);
     renderScene(ctx, scene, {
       w,
       h,
       light,
       showJoints,
       view: drawMode === "draw" ? { k: 1, tx: 0, ty: 0 } : undefined,
+      style: renderMode,
     });
 
     // live preview of the stroke while the pointer is down
@@ -36,7 +38,7 @@ export function CanvasView() {
 
   useEffect(() => {
     requestRedraw();
-  }, [scene, light, showJoints, drawMode, createStroke]);
+  }, [scene, light, showJoints, drawMode, renderMode, createStroke]);
 
   // Calculate mouse position in canvas
   const pos = (e: React.PointerEvent) => {

@@ -4,6 +4,8 @@ import { samplesFromStroke } from "../core/curves";
 import type { ArchetypeName } from "../core/archetypes";
 import type { Scene, Pt } from "../core/types";
 
+type RenderMode = "line" | "vine" | "bone";
+
 interface State {
   archetype: ArchetypeName;
   seed: number;
@@ -11,6 +13,7 @@ interface State {
   showJoints: boolean;
   scene: Scene; // derived from (archetype, seed); never mutated
   drawMode: "auto" | "draw"; // whether to autogenerate or take user drawing input
+  renderMode: RenderMode; // how drawn lines are rendered
   setArchetype: (a: ArchetypeName) => void;
   setSeed: (s: number) => void;
   regenerate: () => void;
@@ -18,6 +21,7 @@ interface State {
   setLight: (l: number) => void;
   setShowJoints: (v: boolean) => void;
   setDrawMode: (m: "auto" | "draw") => void;
+  setRenderMode: (m: RenderMode) => void;
 }
 
 const INITIAL_SEED = 69;
@@ -33,6 +37,7 @@ export const useStore = create<State>()((set, get) => ({
     spines: [generate("a", INITIAL_SEED)],
   },
   drawMode: "auto",
+  renderMode: "vine",
 
   setArchetype: (archetype) =>
     set({
@@ -95,6 +100,11 @@ export const useStore = create<State>()((set, get) => ({
               archetype: get().archetype,
               spines: [],
             },
+    });
+  },
+  setRenderMode: (mode: RenderMode) => {
+    set({
+      renderMode: mode,
     });
   },
 }));
