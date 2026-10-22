@@ -71,6 +71,7 @@ export function renderScene(
   ctx.scale(v.k, v.k);
   ctx.lineJoin = "round";
 
+  // Draw curves based on render mode
   if (o.style === "line")
     drawLines(ctx, scene, {
       light: o.light,
@@ -79,23 +80,40 @@ export function renderScene(
       showJoints: o.showJoints,
     });
   else if (o.style === "vine")
-    drawInk(ctx, scene, {
+    drawRibbonCord(ctx, scene, {
       light: o.light,
       unit,
       px,
       showJoints: o.showJoints,
       vineColor: o.vineColor ?? VINE_COLOR,
     });
+  else if (o.style === "bone") {
+    // Both for now
+    drawRibbonCord(ctx, scene, {
+      light: o.light,
+      unit,
+      px,
+      showJoints: o.showJoints,
+      vineColor: o.vineColor ?? VINE_COLOR,
+      jointColor: o.vineColor,
+    });
+    drawLines(ctx, scene, {
+      light: o.light,
+      unit,
+      px,
+      showJoints: o.showJoints,
+    });
+  }
 
   ctx.restore();
 
-  // Layer 3b: paper grain over everything, in screen space
+  // Add paper grain over everything
   if (o.style !== "line") paperGrain(ctx, o.w, o.h);
   return v;
 }
 
 // The ink pipeline: ribbons + hatching + hand-drawn edges
-function drawInk(
+function drawRibbonCord(
   ctx: CanvasRenderingContext2D,
   scene: Scene,
   o: {
@@ -104,6 +122,7 @@ function drawInk(
     px: number;
     showJoints: boolean;
     vineColor: string;
+    jointColor?: string;
   },
 ) {
   for (let spine of scene.spines) {
@@ -167,13 +186,20 @@ function drawInk(
     // TODO: joints
     // Placeholder joints: filled circles
     if (o.showJoints) {
-      ctx.fillStyle = o.vineColor;
       ctx.strokeStyle = INK;
-      ctx.lineWidth = 8; // 4 * o.px;
-      const jointSize = 10; // 4 * o.unit;
+      ctx.lineWidth = 2; // 4 * o.px;
+      const jointSize = 12; // 4 * o.unit;
       for (const j of spine.joints) {
+        // Large circle
+        ctx.fillStyle = o.jointColor || PAPER;
         ctx.beginPath();
         ctx.arc(j.x, j.y, jointSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        // Small circle
+        ctx.fillStyle = INK;
+        ctx.beginPath();
+        ctx.arc(j.x, j.y, 3 * o.unit, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
       }
