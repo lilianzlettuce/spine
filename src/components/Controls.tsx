@@ -3,9 +3,15 @@ import { useStore } from "../state/store";
 import { exportPng } from "./exportPng";
 
 export function Controls() {
-  const { archetype, seed, light, showJoints, scene } = useStore();
-  const { setArchetype, setSeed, regenerate, setLight, setShowJoints } =
-    useStore.getState();
+  const { archetype, seed, light, showJoints, scene, drawMode } = useStore();
+  const {
+    setArchetype,
+    setSeed,
+    regenerate,
+    setLight,
+    setShowJoints,
+    setDrawMode,
+  } = useStore.getState();
 
   return (
     <aside className="controls">
@@ -30,6 +36,14 @@ export function Controls() {
           value={seed}
           onChange={(e) => setSeed(Number(e.target.value) || 0)}
         />
+      </label>
+
+      <label>
+        Draw Mode
+        <select value={drawMode} onChange={(e) => setDrawMode(e.target.value)}>
+          <option value="auto">Auto</option>
+          <option value="draw">Draw</option>
+        </select>
       </label>
 
       <button onClick={regenerate}>Regenerate</button>

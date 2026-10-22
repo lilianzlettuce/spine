@@ -68,6 +68,7 @@ export function renderScene(
     ctx.stroke();
   }
 
+  // Show joints
   if (o.showJoints) {
     ctx.fillStyle = INK;
     for (const j of scene.joints) {

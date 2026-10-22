@@ -16,7 +16,7 @@ export function CanvasView() {
       w,
       h,
       light,
-      showJoints: true,
+      showJoints,
       view: drawMode === "draw" ? { k: 1, tx: 0, ty: 0 } : undefined,
     });
 
@@ -41,48 +41,6 @@ export function CanvasView() {
   const pos = (e: React.PointerEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  };
-
-  /* Event handlers */
-
-  const handleMouseLeave = () => {
-    isMouseDown.current = false;
-  };
-
-  // Handle touch events for mobile
-  const handleTouchStart = (event: React.TouchEvent<HTMLCanvasElement>) => {
-    lastMouseMoveTime.current = Date.now();
-    isDragging.current = true;
-
-    const touch = event.touches[0];
-    if (!touch || !canvasRef.current) return;
-
-    const rect = canvasRef.current.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
-
-    updatePixels(touchX, touchY);
-  };
-
-  const handleTouchMove = (event: React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDragging.current) return;
-    lastMouseMoveTime.current = Date.now();
-
-    event.preventDefault();
-    const touch = event.touches[0];
-    if (!touch || !canvasRef.current) return;
-
-    const rect = canvasRef.current.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
-
-    updatePixels(touchX, touchY);
-  };
-
-  const handleTouchEnd = () => {
-    isDragging.current = false;
-    lastMouseMoveTime.current = Date.now();
-    updatePixels(-100, -100);
   };
 
   return (
@@ -112,10 +70,6 @@ export function CanvasView() {
         currentCurve.current = []; // reset curve array
         //regenerate();
       }}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     />
   );
 }

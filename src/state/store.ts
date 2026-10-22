@@ -14,10 +14,10 @@ interface State {
   setArchetype: (a: ArchetypeName) => void;
   setSeed: (s: number) => void;
   regenerate: () => void;
+  generateFromStroke: (stroke: Pt[]) => void;
   setLight: (l: number) => void;
   setShowJoints: (v: boolean) => void;
   setDrawMode: (m: "auto" | "draw") => void;
-  setStroke: (samples: Sample[]) => void;
 }
 
 const INITIAL_SEED = 69;
@@ -28,7 +28,7 @@ export const useStore = create<State>()((set, get) => ({
   light: -Math.PI / 4,
   showJoints: true,
   scene: generate("serpentine", INITIAL_SEED),
-  drawMode: "draw",
+  drawMode: "auto",
 
   setArchetype: (archetype) =>
     set({ archetype, scene: generate(archetype, get().seed) }),
@@ -48,11 +48,19 @@ export const useStore = create<State>()((set, get) => ({
   },
   setLight: (light) => set({ light }),
   setShowJoints: (showJoints) => set({ showJoints }),
-  setDrawMode: (mode) =>
+  setDrawMode: (mode) => {
+    console.log("drawmode set");
     set({
       drawMode: mode,
       scene:
-        mode === "auto" ? generate(get().archetype, get().seed) : get().scene,
-    }),
-  setStroke: (s) => set({ scene: generate(get().archetype, get().seed, s) }),
+        mode === "auto"
+          ? generate(get().archetype, get().seed)
+          : {
+              seed: get().seed,
+              archetype: get().archetype,
+              curves: [],
+              joints: [],
+            },
+    });
+  },
 }));
