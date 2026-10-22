@@ -10,11 +10,14 @@ interface State {
   light: number;
   showJoints: boolean;
   scene: Scene; // derived from (archetype, seed); never mutated
+  drawMode: "auto" | "draw"; // whether to autogenerate or take user drawing input
   setArchetype: (a: ArchetypeName) => void;
   setSeed: (s: number) => void;
   regenerate: () => void;
   setLight: (l: number) => void;
   setShowJoints: (v: boolean) => void;
+  setDrawMode: (m: "auto" | "draw") => void;
+  setStroke: (samples: Sample[]) => void;
 }
 
 const INITIAL_SEED = 69;
@@ -25,6 +28,7 @@ export const useStore = create<State>()((set, get) => ({
   light: -Math.PI / 4,
   showJoints: true,
   scene: generate("serpentine", INITIAL_SEED),
+  drawMode: "draw",
 
   setArchetype: (archetype) =>
     set({ archetype, scene: generate(archetype, get().seed) }),
@@ -44,4 +48,11 @@ export const useStore = create<State>()((set, get) => ({
   },
   setLight: (light) => set({ light }),
   setShowJoints: (showJoints) => set({ showJoints }),
+  setDrawMode: (mode) =>
+    set({
+      drawMode: mode,
+      scene:
+        mode === "auto" ? generate(get().archetype, get().seed) : get().scene,
+    }),
+  setStroke: (s) => set({ scene: generate(get().archetype, get().seed, s) }),
 }));

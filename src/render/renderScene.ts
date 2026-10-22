@@ -6,12 +6,13 @@ export interface RenderOpts {
   light: number; // radians; reserved for hatching
   showJoints: boolean;
   padding?: number;
+  view?: ViewTransform; // skip auto-fit if given
 }
 
 export interface ViewTransform {
-  k: number;
-  tx: number;
-  ty: number;
+  k: number; // scale
+  tx: number; // transform x
+  ty: number; // transform y
 }
 
 const PAPER = "#f1ebdd";
@@ -50,7 +51,7 @@ export function renderScene(
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, o.w, o.h);
 
-  const v = fitTransform(scene, o.w, o.h, o.padding);
+  const v = o.view ? o.view : fitTransform(scene, o.w, o.h, o.padding);
   ctx.save();
   ctx.translate(v.tx, v.ty);
   ctx.scale(v.k, v.k);
@@ -61,7 +62,7 @@ export function renderScene(
   // Draw deepest level first so the main flow sits on top
   const ordered = [...scene.curves].sort((a, b) => b.level - a.level);
   for (const c of ordered) {
-    ctx.lineWidth = (WIDTH[c.level] ?? 0.7) / v.k;
+    ctx.lineWidth = (WIDTH[c.level] ?? 0.7) / v.k; // scale based on size
     ctx.beginPath();
     c.pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
     ctx.stroke();

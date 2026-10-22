@@ -1,7 +1,8 @@
 import type { Sample } from "./types";
 
 /** Function defining curvature (how sharply curve turns) as a function of arc length
- * kappa(s) in radians per unit of distance
+ * It's the derivative of a curve function
+ * @return {number} turn rate in radians per unit of distance
  */
 export type Kappa = (s: number) => number;
 
