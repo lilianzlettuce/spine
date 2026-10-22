@@ -2,9 +2,7 @@ import { create } from "zustand";
 import { generate } from "../core/generate";
 import { samplesFromStroke } from "../core/curves";
 import type { ArchetypeName } from "../core/archetypes";
-import type { Scene, Pt } from "../core/types";
-
-type RenderMode = "line" | "vine" | "bone";
+import type { RenderMode, DrawMode, Scene, Pt } from "../core/types";
 
 interface State {
   archetype: ArchetypeName;
@@ -12,16 +10,18 @@ interface State {
   light: number;
   showJoints: boolean;
   scene: Scene; // derived from (archetype, seed); never mutated
-  drawMode: "auto" | "draw"; // whether to autogenerate or take user drawing input
+  drawMode: DrawMode; // whether to autogenerate or take user drawing input
   renderMode: RenderMode; // how drawn lines are rendered
+  vineColor: string; // color of base vines
   setArchetype: (a: ArchetypeName) => void;
   setSeed: (s: number) => void;
   regenerate: () => void;
   createStroke: (stroke: Pt[]) => void;
   setLight: (l: number) => void;
   setShowJoints: (v: boolean) => void;
-  setDrawMode: (m: "auto" | "draw") => void;
+  setDrawMode: (m: DrawMode) => void;
   setRenderMode: (m: RenderMode) => void;
+  setVineColor: (c: string) => void;
 }
 
 const INITIAL_SEED = 69;
@@ -38,6 +38,7 @@ export const useStore = create<State>()((set, get) => ({
   },
   drawMode: "auto",
   renderMode: "vine",
+  vineColor: "#db5353",
 
   setArchetype: (archetype) =>
     set({
@@ -105,6 +106,11 @@ export const useStore = create<State>()((set, get) => ({
   setRenderMode: (mode: RenderMode) => {
     set({
       renderMode: mode,
+    });
+  },
+  setVineColor: (color: string) => {
+    set({
+      vineColor: color,
     });
   },
 }));

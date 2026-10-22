@@ -1,4 +1,4 @@
-import type { Curve, Pt, Scene } from "./types";
+import type { Curve, Pt, Sample } from "./types";
 import { mulberry32 } from "./rng";
 import { addKappa, curveFromCurvature, hookTail, sineBends } from "./curves";
 import { curveLength, pointAtDistance, turnSign } from "./sampling";
@@ -9,7 +9,7 @@ export function generate(
   name: ArchetypeName,
   seed: number,
   mainCurveSamples: Sample[] = [],
-): Scene {
+) {
   const A: Archetype = ARCHETYPES[name];
   const rng = mulberry32(seed);
   const curves: Curve[] = [];

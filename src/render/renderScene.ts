@@ -3,6 +3,7 @@ import { curveLength } from "../core/sampling";
 import { buildRibbon, inkEdge, tracePolygon } from "./ribbon";
 import { hatchRibbon } from "./hatching";
 import { paperGrain } from "./paper";
+import type { RenderMode } from "../core/types";
 
 export interface RenderOpts {
   w: number;
@@ -11,7 +12,8 @@ export interface RenderOpts {
   showJoints: boolean;
   padding?: number;
   view?: ViewTransform; // fixed view (draw mode). If omitted, fit the scene to the canvas
-  style?: "vine" | "line";
+  style?: RenderMode;
+  vineColor?: string;
 }
 
 export interface ViewTransform {
@@ -22,7 +24,7 @@ export interface ViewTransform {
 
 const PAPER = "#f1ebdd";
 const INK = "#1b1a17";
-const VINE_COLOR = "#d88181";
+const VINE_COLOR = "#db5353";
 
 // Fit scene bbox into the canvas
 export function fitTransform(
@@ -77,7 +79,13 @@ export function renderScene(
       showJoints: o.showJoints,
     });
   else if (o.style === "vine")
-    drawInk(ctx, scene, { light: o.light, unit, px, showJoints: o.showJoints });
+    drawInk(ctx, scene, {
+      light: o.light,
+      unit,
+      px,
+      showJoints: o.showJoints,
+      vineColor: o.vineColor ?? VINE_COLOR,
+    });
 
   ctx.restore();
 
@@ -90,7 +98,13 @@ export function renderScene(
 function drawInk(
   ctx: CanvasRenderingContext2D,
   scene: Scene,
-  o: { light: number; unit: number; px: number; showJoints: boolean },
+  o: {
+    light: number;
+    unit: number;
+    px: number;
+    showJoints: boolean;
+    vineColor: string;
+  },
 ) {
   for (let spine of scene.spines) {
     // Painter's algorithm: draw twigs, then branches, then the main curve last
@@ -106,7 +120,7 @@ function drawInk(
 
       // Fill with paper color
       tracePolygon(ctx, ribbon);
-      ctx.fillStyle = VINE_COLOR;
+      ctx.fillStyle = o.vineColor;
       ctx.fill();
 
       // Hatching, clipped to the outline (path from tracePolygon is still current)

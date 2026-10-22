@@ -1,10 +1,19 @@
 import { ARCHETYPE_NAMES, type ArchetypeName } from "../core/archetypes";
 import { useStore } from "../state/store";
-import { exportPng } from "./exportPng";
+//import { exportPng } from "./exportPng";
+import type { RenderMode, DrawMode } from "../core/types";
 
 export function Controls() {
-  const { archetype, seed, light, showJoints, scene, drawMode, renderMode } =
-    useStore();
+  const {
+    archetype,
+    seed,
+    light,
+    showJoints,
+    scene,
+    drawMode,
+    renderMode,
+    vineColor,
+  } = useStore();
   const {
     setArchetype,
     setSeed,
@@ -13,6 +22,7 @@ export function Controls() {
     setShowJoints,
     setDrawMode,
     setRenderMode,
+    setVineColor,
   } = useStore.getState();
 
   return (
@@ -35,7 +45,7 @@ export function Controls() {
         Render Mode
         <select
           value={renderMode}
-          onChange={(e) => setRenderMode(e.target.value)}
+          onChange={(e) => setRenderMode(e.target.value as RenderMode)}
         >
           <option value="line">Line</option>
           <option value="vine">Vine</option>
@@ -44,7 +54,10 @@ export function Controls() {
 
       <label>
         Draw Mode
-        <select value={drawMode} onChange={(e) => setDrawMode(e.target.value)}>
+        <select
+          value={drawMode}
+          onChange={(e) => setDrawMode(e.target.value as DrawMode)}
+        >
           <option value="auto">Auto</option>
           <option value="draw">Draw</option>
         </select>
@@ -82,11 +95,20 @@ export function Controls() {
         Show attachment points
       </label>
 
-      <button onClick={() => exportPng(scene, light)}>Export PNG</button>
+      {/*<button onClick={() => exportPng(scene, light)}>Export PNG</button>*/}
 
       <p className="hint">
         {scene.spines[0]?.curves.length} curves · seed {scene.seed}
       </p>
+
+      <label>Vine color:</label>
+      <input
+        type="color"
+        id="theme-color"
+        name="theme-color"
+        value={vineColor}
+        onChange={(e) => setVineColor(e.target.value)}
+      />
     </aside>
   );
 }

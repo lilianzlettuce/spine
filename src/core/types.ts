@@ -1,3 +1,7 @@
+// Render settings
+export type RenderMode = "line" | "vine" | "bone";
+export type DrawMode = "auto" | "draw";
+
 // Point
 export interface Pt {
   x: number;
