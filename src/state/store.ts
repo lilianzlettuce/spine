@@ -27,14 +27,14 @@ interface State {
 const INITIAL_SEED = 69;
 
 export const useStore = create<State>()((set, get) => ({
-  archetype: "a",
+  archetype: "simple",
   seed: INITIAL_SEED,
   light: -Math.PI / 4,
   showJoints: true,
   scene: {
     seed: INITIAL_SEED,
     archetype: "serpentine",
-    spines: [generate("a", INITIAL_SEED)],
+    spines: [generate("simple", INITIAL_SEED)],
   },
   drawMode: "auto",
   renderMode: "vine",

@@ -16,7 +16,7 @@ export interface Archetype {
 }
 
 export const ARCHETYPES = {
-  a: {
+  simple: {
     mainLength: 800,
     bends: [0.5, 2], // [0.5, 1.5],
     swing: [0.7, 2], // try 10
@@ -30,9 +30,9 @@ export const ARCHETYPES = {
     hookChance: 0.15,
     clusters: [2, 3],
   },
-  serpentine: {
+  idk: {
     mainLength: 800,
-    bends: [0.5, 2], // [0.5, 1.5],
+    bends: [1, 3], // [0.5, 1.5],
     swing: [0.7, 2], // try 10
     taper: 1, // try 10, 100, 1000
     mainHook: 0,
@@ -58,7 +58,7 @@ export const ARCHETYPES = {
     hookChance: 0.5,
     clusters: [2, 3],
   },
-  tangle: {
+  snakes: {
     mainLength: 800,
     bends: [4, 5],
     swing: [1.1, 1.6],
@@ -71,6 +71,20 @@ export const ARCHETYPES = {
     outerBias: 0.5,
     hookChance: 0.3,
     clusters: [3, 4],
+  },
+  weird: {
+    mainLength: 800,
+    bends: [1, 3], // [0.5, 1.5],
+    swing: [0.7, 2], // try 10
+    taper: 10, // try 10, 100, 1000
+    mainHook: 0,
+    branches: [6, 10],
+    branchLen: [0.18, 0.4],
+    branchSwing: [0.5, 1.2],
+    angle: [0.4, 0.9],
+    outerBias: 0.75,
+    hookChance: 0.15,
+    clusters: [2, 3],
   },
 } satisfies Record<string, Archetype>;
 

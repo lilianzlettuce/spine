@@ -1,14 +1,10 @@
-import { useState } from "react";
-import heroImg from "./assets/hero.png";
 import { CanvasView } from "./components/CanvasView.tsx";
 import { Controls } from "./components/Controls.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div className="app">
+      <div className="flex flex-col sm:flex-row h-full">
         <Controls />
         <main className="stage">
           <CanvasView />

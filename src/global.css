@@ -7,11 +7,8 @@
   --text-h: #08060d;
   --bg: var(--paper);
   --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --accent: #242424;
+  --accent-bg: rgb(28, 28, 28);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -24,6 +21,7 @@
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -101,42 +99,35 @@ body {
   font-family: system-ui, sans-serif;
   color: #222;
 }
-.app {
-  display: flex;
-  height: 100%;
-}
-.controls {
-  width: 240px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-right: 1px solid #ddd;
-  background: #fafafa;
-}
-.controls h1 {
+h1 {
   font-size: 16px;
   margin: 0;
 }
-.controls label {
+label {
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-size: 12px;
+  font-weight: 500;
 }
-.controls label.row {
-  flex-direction: row;
-  align-items: center;
-  gap: 6px;
+input {
+  font-size: 12px;
+  font-weight: 400;
 }
-.controls button {
-  padding: 8px;
+select {
+  background: rgb(214, 212, 212);
+  font-weight: 400;
+}
+button {
+  color: white;
+  background: var(--accent-bg);
+  height: fit-content;
+  font-size: 12px;
+  padding: 2px 12px;
+  display: inline-block;
   cursor: pointer;
 }
-.hint {
-  font-size: 11px;
-  color: #777;
-}
+
 .stage {
   flex: 1;
   min-width: 0;

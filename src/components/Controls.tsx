@@ -26,10 +26,10 @@ export function Controls() {
   } = useStore.getState();
 
   return (
-    <aside className="controls">
+    <aside className="w-full sm:w-64 p-4 flex flex-col gap-3 border-r border-gray-200 bg-gray-50">
       <h1>Spine Growth Tool</h1>
 
-      <div className="">
+      <div className="flex flex-row flex-wrap items-center gap-2 sm:flex-col">
         <label>
           Archetype
           <select
@@ -88,7 +88,7 @@ export function Controls() {
           />
         </label>
 
-        <label className="row">
+        <label className="flex flex-row items-center gap-2">
           <input
             type="checkbox"
             checked={showJoints}
@@ -99,18 +99,20 @@ export function Controls() {
 
         {/*<button onClick={() => exportPng(scene, light)}>Export PNG</button>*/}
 
-        <p className="hint">
+        <p className="text-xs text-gray-600">
           {scene.spines[0]?.curves.length} curves · seed {scene.seed}
         </p>
 
-        <label>Color:</label>
-        <input
-          type="color"
-          id="theme-color"
-          name="theme-color"
-          value={vineColor}
-          onChange={(e) => setVineColor(e.target.value)}
-        />
+        <div className="flex flex-row items-center gap-2">
+          <label>Color:</label>
+          <input
+            type="color"
+            id="theme-color"
+            name="theme-color"
+            value={vineColor}
+            onChange={(e) => setVineColor(e.target.value)}
+          />
+        </div>
       </div>
     </aside>
   );
