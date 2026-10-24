@@ -21,6 +21,8 @@ Users can adjust
       - Ribs along curves aligned with normal at each point
 -
 
+TODO: better documentation of core files/functions
+
 ### Process
 
 #### Inspiration
@@ -70,6 +72,8 @@ User input:
     - Using existing bone-based shape variations (e.g. spine vertebrae, skulls, appendages) that stack to create the illusion of a connected skeleton
     - Implement:
       - Spine sampling utility (points, normals, and tangents at evenly spaced distances) and the first generator (vertebrae
+
+TODO: add images, organize this section more
 
 #### Implementation
 
