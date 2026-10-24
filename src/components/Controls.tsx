@@ -70,6 +70,7 @@ export function Controls() {
         <label>
           Seed
           <input
+            className="w-18"
             type="number"
             value={seed}
             onChange={(e) => setSeed(Number(e.target.value) || 0)}
@@ -79,6 +80,7 @@ export function Controls() {
         <label>
           Light angle
           <input
+            className="w-18"
             type="range"
             min={-Math.PI}
             max={Math.PI}
